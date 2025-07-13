@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Пошук справи</title>
+  </head>
+  <body>
+    <p>Зачекайте, виконується перенаправлення на сайт судової влади…</p>
+
+    <form id="redirectForm" action="https://court.gov.ua/fair/" method="POST">
+      <input type="hidden" name="case_number" id="caseInput" />
+    </form>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const caseNumber = params.get("case");
+
+      if (caseNumber) {
+        document.getElementById("caseInput").value = caseNumber;
+        document.getElementById("redirectForm").submit();
+      } else {
+        document.body.innerHTML = "<p>Помилка: номер справи не вказано в параметрі «case».</p>";
+      }
+    </script>
+  </body>
+</html>
