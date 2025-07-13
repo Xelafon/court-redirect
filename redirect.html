@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="uk">
-  
 <head>
   <meta charset="UTF-8" />
-  <title>Номер справи</title>
+  <title>Судова справа</title>
   <style>
     body {
       font-family: sans-serif;
@@ -14,42 +13,52 @@
       font-size: 18px;
       padding: 10px 20px;
       margin: 10px;
+      cursor: pointer;
     }
-    #caseNumber {
-      font-size: 24px;
+    .label {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #333;
+    }
+    .value {
+      font-size: 22px;
       font-weight: bold;
       color: #2c3e50;
     }
   </style>
 </head>
 <body>
-  <p>Номер справи:</p>
-  <div id="caseNumber">завантаження…</div>
+  <div class="label">Номер справи:</div>
+  <div id="caseNumber" class="value">завантаження…</div>
 
-  <button onclick="copyCase()">📋 Скопіювати</button>
-  <br/>
-  <a href="https://court.gov.ua/fair/" target="_blank">
-    <button>🌐 Перейти на сайт суду</button>
-  </a>
+  <div class="label">П.І.Б. клієнта:</div>
+  <div id="clientName" class="value">завантаження…</div>
 
+  <button onclick="copyAndGo('case')">📋 Скопіювати номер справи</button>
+  <button onclick="copyAndGo('name')">👤 Скопіювати П.І.Б. клієнта</button>
 
-  
   <script>
     const params = new URLSearchParams(window.location.search);
     const caseNumber = params.get("case");
+    const clientName = params.get("name");
 
-    const caseDiv = document.getElementById("caseNumber");
-    if (caseNumber) {
-      caseDiv.innerText = caseNumber;
-    } else {
-      caseDiv.innerText = "Номер не вказано";
-    }
+    document.getElementById("caseNumber").innerText = caseNumber || "(немає)";
+    document.getElementById("clientName").innerText = clientName || "(немає)";
 
-    function copyCase() {
-      if (caseNumber) {
-        navigator.clipboard.writeText(caseNumber).then(() => {
-          alert("Номер справи скопійовано!");
+    function copyAndGo(type) {
+      let textToCopy = "";
+      if (type === "case") {
+        textToCopy = caseNumber;
+      } else if (type === "name") {
+        textToCopy = clientName;
+      }
+
+      if (textToCopy) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          window.location.href = "https://court.gov.ua/fair/";
         });
+      } else {
+        alert("Значення для копіювання не передано!");
       }
     }
   </script>
